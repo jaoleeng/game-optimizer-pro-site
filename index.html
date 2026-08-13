@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Game Optimizer PRO — otimização real pra jogos no Windows</title>
+<meta name="description" content="App desktop que otimiza seu PC pra jogos: plano de energia, GPU scheduling, prioridade de processos, overclock assistido, perfis por jogo e agendamento automático." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>" />
+<style>
+@font-face { font-family:'Rajdhani'; font-style:normal; font-weight:500; src:url('assets/fonts/rajdhani-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family:'Rajdhani'; font-style:normal; font-weight:600; src:url('assets/fonts/rajdhani-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family:'Rajdhani'; font-style:normal; font-weight:700; src:url('assets/fonts/rajdhani-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family:'JetBrains Mono'; font-style:normal; font-weight:400; src:url('assets/fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family:'JetBrains Mono'; font-style:normal; font-weight:500; src:url('assets/fonts/jetbrains-mono-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family:'JetBrains Mono'; font-style:normal; font-weight:700; src:url('assets/fonts/jetbrains-mono-latin-700-normal.woff2') format('woff2'); }
+
+:root {
+  --bg: #07090e;
+  --panel: rgba(11,15,23,.78);
+  --border: #1c2130;
+  --border-2: #2c3346;
+  --text: #dfe4ee;
+  --muted: #8b94a8;
+  --hot: #ff5a36;
+  --cold: #2fd9e8;
+  --gold: #f4b740;
+  --danger: #ff3b5c;
+  --font-display: 'Rajdhani', 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:'Segoe UI', system-ui, sans-serif; line-height:1.6; }
+a { color: inherit; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* nav */
+.topnav { display:flex; align-items:center; justify-content:space-between; padding:18px 0; border-bottom:1px solid var(--border); }
+.brand { font:700 20px var(--font-display); text-transform:uppercase; letter-spacing:.12em; color:var(--cold); }
+.brand-accent { color:var(--hot); }
+.nav-cta { font:700 12px var(--font-display); text-transform:uppercase; letter-spacing:.08em; color:var(--bg); background:var(--hot); padding:10px 18px; text-decoration:none; clip-path: polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); }
+
+/* hero */
+.hero { padding: 72px 0 56px; text-align:center; }
+.hero-eyebrow { font:600 11px var(--mono); letter-spacing:.24em; color:var(--muted); text-transform:uppercase; }
+.hero h1 { font:700 clamp(36px,6vw,64px)/1.05 var(--font-display); text-transform:uppercase; margin:14px 0; }
+.hero h1 .accent { color:var(--hot); }
+.hero p { max-width:620px; margin:0 auto 30px; color:var(--muted); font-size:16px; }
+.hero-ctas { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.btn-primary { font:700 15px var(--font-display); text-transform:uppercase; letter-spacing:.06em; color:#180a06; background:var(--hot); padding:16px 32px; text-decoration:none; clip-path: polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px); }
+.btn-secondary { font:700 15px var(--font-display); text-transform:uppercase; letter-spacing:.06em; color:var(--cold); background:transparent; border:1px solid var(--border-2); padding:15px 30px; text-decoration:none; }
+.hero-meta { margin-top:16px; font:12px var(--mono); color:var(--muted); }
+
+/* beta banner */
+.beta-banner { background: rgba(244,183,64,.08); border:1px solid var(--gold); border-left:3px solid var(--gold); color:#f4d999; padding:14px 18px; font-size:13px; margin: 0 0 40px; }
+.beta-banner strong { color:#fff; }
+
+/* screenshot */
+.shot-frame { border:1px solid var(--border-2); border-radius:4px; overflow:hidden; box-shadow:0 30px 80px -30px rgba(47,217,232,.25); margin-bottom: 80px; }
+.shot-frame img { display:block; width:100%; }
+
+/* features */
+.section-label { font:600 11px var(--mono); letter-spacing:.22em; color:var(--muted); text-transform:uppercase; text-align:center; }
+.section-title { font:700 34px var(--font-display); text-transform:uppercase; text-align:center; margin:10px 0 44px; }
+
+.grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:80px; }
+.card { background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--cold); padding:22px; }
+.card h3 { font:700 16px var(--font-display); text-transform:uppercase; margin:0 0 8px; letter-spacing:.02em; }
+.card p { color:var(--muted); font-size:13.5px; margin:0; }
+
+/* pricing table */
+.table-wrap { overflow-x:auto; margin-bottom:80px; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th, td { text-align:left; padding:13px 16px; border-bottom:1px solid var(--border); }
+th { font:600 11px var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+td:last-child, th:last-child { text-align:center; white-space:nowrap; }
+.tag-free { color:var(--cold); font:700 11px var(--mono); }
+.tag-premium { color:var(--gold); font:700 11px var(--mono); }
+
+/* screenshots row */
+.shots-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:80px; }
+.shots-row .shot-frame { margin-bottom:0; }
+
+/* footer */
+footer { border-top:1px solid var(--border); padding:32px 0 60px; color:var(--muted); font-size:12.5px; }
+footer a { color:var(--cold); text-decoration:none; }
+footer .disclaimer { max-width:720px; margin-bottom:18px; line-height:1.7; }
+
+@media (max-width: 760px) {
+  .grid3, .shots-row { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="topnav">
+    <span class="brand">OPTIMIZER<span class="brand-accent">/PRO</span></span>
+    <a class="nav-cta" href="#download">Baixar</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-eyebrow">App desktop pra Windows · grátis pra começar</div>
+    <h1>Seu PC não tá<br>rodando no <span class="accent">limite</span>.</h1>
+    <p>Plano de energia oculto do Windows, GPU Scheduling, prioridade de processos, limpeza de sistema e troca de perfil de overclock — tudo com um clique. Monitor completo de CPU, GPU, RAM, disco e rede embutido.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" id="download-btn" href="#download">Baixar grátis</a>
+      <a class="btn-secondary" href="#recursos">Ver recursos</a>
+    </div>
+    <div class="hero-meta">Windows 10/11 · 64-bit · instalador ~100 MB</div>
+  </section>
+
+  <div class="beta-banner">
+    <strong>Versão beta:</strong> o Game Optimizer PRO já aplica todas as otimizações reais no seu PC. O sistema de conta/Premium ainda está sendo finalizado — por enquanto, todos os ajustes rodam liberados pra quem testar essa versão.
+  </div>
+
+  <div class="shot-frame">
+    <img src="assets/screenshot-monitor.png" alt="Painel Monitor do Game Optimizer PRO mostrando CPU, GPU, RAM, disco e rede em tempo real" loading="lazy" />
+  </div>
+
+  <div id="recursos"></div>
+  <div class="section-label">O que ele faz</div>
+  <div class="section-title">Ajustes reais, reversíveis</div>
+  <div class="grid3">
+    <div class="card">
+      <h3>Energia &amp; sistema</h3>
+      <p>Ativa o plano "Ultimate Performance" oculto do Windows, prioriza jogos no agendador multimídia (MMCSS) e ajusta prioridade de processos em primeiro plano.</p>
+    </div>
+    <div class="card">
+      <h3>GPU &amp; rede</h3>
+      <p>Hardware-accelerated GPU Scheduling (HAGS), desativa Game DVR do Xbox Game Bar, flush de DNS e desativa o algoritmo de Nagle pra reduzir latência online.</p>
+    </div>
+    <div class="card">
+      <h3>Monitor completo</h3>
+      <p>Temperatura, uso, VRAM, clocks, consumo e fan da GPU; uso, clock e temperatura da CPU; RAM, disco e rede em tempo real — sem precisar abrir outro programa.</p>
+    </div>
+    <div class="card">
+      <h3>Perfis por jogo</h3>
+      <p>Salve a combinação de ajustes (e o perfil de overclock) que funciona pra cada jogo e aplique tudo com um clique antes de abrir.</p>
+    </div>
+    <div class="card">
+      <h3>Agendamento automático</h3>
+      <p>Defina horários pra otimização rodar sozinha — todo dia, em dias úteis, ou no intervalo que você escolher.</p>
+    </div>
+    <div class="card">
+      <h3>Overclock assistido</h3>
+      <p>Troca entre perfis 1–5 já configurados por você no MSI Afterburner. Nenhum valor de clock ou voltagem é escrito por fora — sua placa, suas regras.</p>
+    </div>
+  </div>
+
+  <div class="shots-row">
+    <div class="shot-frame"><img src="assets/screenshot-painel.png" alt="Painel principal com fila de otimização" loading="lazy" /></div>
+    <div class="shot-frame"><img src="assets/screenshot-overclock.png" alt="Tela de overclock assistido" loading="lazy" /></div>
+  </div>
+
+  <div class="section-label">Planos</div>
+  <div class="section-title">Grátis pra testar, PRO pra valer</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Ajuste</th><th>Plano</th></tr></thead>
+      <tbody>
+        <tr><td>Plano de energia Ultimate Performance</td><td><span class="tag-free">GRÁTIS</span></td></tr>
+        <tr><td>Limpeza de temporários</td><td><span class="tag-free">GRÁTIS</span></td></tr>
+        <tr><td>Limpeza de Prefetch</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>Flush de DNS + rede</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>Fechar processos em 2º plano</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>Desativar Game DVR</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>GPU Scheduling (HAGS) + MMCSS</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>Nagle desativado (latência online)</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>Perfis por jogo + agendamento</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>Overclock assistido</td><td><span class="tag-premium">PREMIUM</span></td></tr>
+        <tr><td>Monitor completo (CPU/GPU/RAM/disco/rede)</td><td><span class="tag-free">GRÁTIS</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="download"></div>
+  <div class="section-label">Baixar</div>
+  <div class="section-title">Game Optimizer PRO 0.1.0</div>
+  <div style="text-align:center; margin-bottom:80px">
+    <a class="btn-primary" href="https://github.com/jaoleeng/game-optimizer-pro-site/releases/latest/download/GameOptimizerPRO-Setup-0.1.0.exe">Baixar instalador (.exe)</a>
+    <div class="hero-meta">Pede permissão de Administrador ao abrir — é assim que aplica os ajustes de sistema.</div>
+  </div>
+
+  <footer>
+    <div class="disclaimer">Esta é uma versão beta em desenvolvimento ativo. O instalador não é assinado digitalmente ainda, então o Windows SmartScreen pode avisar sobre "editor desconhecido" — isso é esperado nesta fase, clique em "Mais informações" → "Executar assim mesmo". Login e contas Premium dependem de um servidor que ainda está sendo publicado; por enquanto todos os ajustes rodam liberados pra quem instalar essa versão de teste.</div>
+    <span>Game Optimizer PRO · <a href="https://github.com/jaoleeng/game-optimizer-pro-site">código-fonte deste site</a></span>
+  </footer>
+</div>
+
+</body>
+</html>
