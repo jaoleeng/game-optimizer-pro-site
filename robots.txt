@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jaoleeng.github.io/game-optimizer-pro-site/sitemap.xml
