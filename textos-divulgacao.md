@@ -235,7 +235,7 @@ o que preencher:
 - **Operating system:** Windows 10, Windows 11 (64-bit)
 - **License:** Freeware / Free to try (freemium — deixa claro que tem versão paga)
 - **Homepage URL:** https://jaoleeng.github.io/game-optimizer-pro-site/
-- **Download URL:** link direto do instalador — `https://github.com/jaoleeng/game-optimizer-pro-site/releases/latest/download/GameOptimizerPRO-Setup-0.1.0.exe`
+- **Download URL:** link direto do instalador — `https://github.com/jaoleeng/game-optimizer-pro-site/releases/latest/download/GameOptimizerPRO-Setup.exe`
 - **Screenshots:** os três PNGs em `assets/` do repositório do site
 
 **Aviso importante:** alguns desses diretórios rejeitam ou sinalizam
